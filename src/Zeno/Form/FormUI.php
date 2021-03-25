@@ -2,19 +2,15 @@
 
 namespace Zeno\Form;
 
-use Corepractice\Form\{ModalForm,Form,CustomForm,SimpleForm};
-
 trait FormUI {
 
-
-
     /**
-     * @deprecated
-     *
      * @param callable $function
      * @return CustomForm
+     * @deprecated
+     *
      */
-    public function createCustomForm(callable $function = null) : CustomForm {
+    public function createCustomForm(callable $function): CustomForm {
         return new CustomForm($function);
     }
 
@@ -37,4 +33,5 @@ trait FormUI {
     public function createModalForm(callable $function = null) : ModalForm {
         return new ModalForm($function);
     }
+
 }
