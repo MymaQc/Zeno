@@ -2,6 +2,7 @@
 
 namespace Zeno\Events;
 
+use Zeno\Core;
 use pocketmine\entity\Effect;
 use pocketmine\entity\EffectInstance;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
@@ -10,7 +11,6 @@ use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\enchantment\EnchantmentInstance;
 use pocketmine\item\Item;
 use pocketmine\Player;
-use Zeno\Core;
 
 class EntityDamageByEntity implements Listener {
 
@@ -137,5 +137,5 @@ class EntityDamageByEntity implements Listener {
             }
         } return true;
     }
-    
+
 }

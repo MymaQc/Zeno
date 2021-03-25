@@ -2,11 +2,15 @@
 
 namespace Zeno;
 
+use pocketmine\event\player\PlayerInteractEvent;
+use pocketmine\event\player\PlayerQuitEvent;
+use pocketmine\event\player\PlayerRespawnEvent;
+use pocketmine\Player;
 use Zeno\API\{SanctionAPI, SelectAPI, ServerAPI};
 use Zeno\Commands\{Ban, Banlist, Gamemode, Kick, KickAll, Kit, Knockback, Mute, Mutelist, Online, Ping, Say, Size, Spawn, Tell, TpRandom, TPS, Unban, Unmute};
 use Zeno\Form\FormUI;
 use Zeno\Events\{EntityDamageByEntity, PlayerChat, PlayerCreation, PlayerDeath, PlayerExhaust, PlayerInteract, PlayerJoin, PlayerPreLogin};
-use Zeno\Others\Gadgets;
+use Zeno\Others\{Gadgets, Settings};
 use Zeno\Selector\{SelectAllPlayers, SelectRandomPlayers};
 use Zeno\Tasks\{BroadcastMessageTask, ParticleTask};
 use pocketmine\command\Command;
@@ -25,6 +29,7 @@ class Core extends PluginBase implements Listener {
     public $red = array();
     public $green = array();
     public $blue = array();
+    public static $cooldown;
     public static $data;
     private static $config;
     private static $instance;
@@ -64,18 +69,63 @@ class Core extends PluginBase implements Listener {
         }
     }
 
-    public function onJoin(PlayerJoinEvent $event){
-        $pl = $event->getPlayer();
-        $lvl = $pl->getLevel();
-        $pl->teleport($this->getServer()->getDefaultLevel()->getSafeSpawn());
-        $pl->setGamemode(0);
-        $pl->setHealth(20);
-        $pl->setFood(20);
-        $pl->setMaxHealth(20);
-        $pl->setScale(1);
-        $pl->setImmobile(false);
-        $pl->removeAllEffects();
-        $this->getArticulos()->give($pl);
+    public function onJoin(PlayerJoinEvent $event) {
+        $player = $event->getPlayer();
+        $lvl = $player->getLevel();
+        $player->teleport($this->getServer()->getDefaultLevel()->getSafeSpawn());
+        $player->setGamemode(0);
+        $player->setHealth(20);
+        $player->setFood(20);
+        $player->setMaxHealth(20);
+        $player->setScale(1);
+        $player->setImmobile(false);
+        $player->removeAllEffects();
+        $this->getArticulos()->give($player);
+    }
+
+    public function onQuit(PlayerQuitEvent $event) {
+        $player = $event->getPlayer();
+        $player->getInventory()->clearAll();
+        $player->getArmorInventory()->clearAll();
+        $lvl = $player->getLevel();
+    }
+
+    public function onRespawn(PlayerRespawnEvent $event) {
+        $player = $event->getPlayer();
+        $player->teleport($this->getServer()->getDefaultLevel()->getSafeSpawn());
+        $player->setGamemode(0);
+        $player->setHealth(20);
+        $player->setFood(20);
+        $player->setMaxHealth(20);
+        $player->setScale(1);
+        $player->setImmobile(false);
+        $player->removeAllEffects();
+        $player->getInventory()->clearAll();
+        $player->getArmorInventory()->clearAll();
+        $this->getArticulos()->give($player);
+    }
+
+    public function onInteract(PlayerInteractEvent $event) {
+        $player = $event->getPlayer();
+        $item = $player->getInventory()->getItemInHand();
+        if (isset(self::$cooldown[$player->getName()]) and self::$cooldown[$player->getName()] - time() > 0) {
+            return;
+        }
+
+        if (!$event->getAction() == $event::RIGHT_CLICK_BLOCK and !$event->getAction() == $event::RIGHT_CLICK_AIR) {
+            return;
+        }
+
+        self::$cooldown[$player->getName()] = time()+1;
+        if ($item->getName() == "§aFFA") {
+            $this->getArticulos()->MiniGM($player);
+        } else if ($item->getName() == "§aEvent") {
+            if ($player instanceof Player) {
+                $this->getArticulos()->eventt($player);
+            }
+        } else if ($item->getName() === "§aSettings"){
+            Settings::settings($player);
+        }
     }
 
     private function registerCommand(Command $cmd) : void {

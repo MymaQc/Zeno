@@ -24,12 +24,12 @@ class Gadgets {
         $this->plugin = $plugin;
     }
 
-    public function give($pl){
-        $pl->getInventory()->clearAll();
-        $pl->getArmorInventory()->clearAll();
-        $pl->getInventory()->setItem(4,Item::get(345,0,1)->setCustomName("§aFFA"));
-        $pl->getInventory()->setItem(1,Item::get(388,0,1)->setCustomName("§aEvent"));
-        $pl->getInventory()->setItem(7,Item::get(399,0,1)->setCustomName("§aSettings"));
+    public function give($player){
+        $player->getInventory()->clearAll();
+        $player->getArmorInventory()->clearAll();
+        $player->getInventory()->setItem(4,Item::get(345,0,1)->setCustomName("§aFFA"));
+        $player->getInventory()->setItem(1,Item::get(388,0,1)->setCustomName("§aEvent"));
+        $player->getInventory()->setItem(7,Item::get(399,0,1)->setCustomName("§aSettings"));
     }
 
     public function MiniGM($pl){
