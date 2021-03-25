@@ -7,7 +7,7 @@ use pocketmine\entity\Entity;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\Player;
 
-abstract class CustomPlayer extends Player {
+class CustomPlayer extends Player {
 
     /**
      * @param Entity $attacker
