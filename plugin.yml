@@ -1,0 +1,5 @@
+name: ZenoCore
+author: Myma
+version: 1.0
+main: Zeno\Core
+api: 3.9.0
