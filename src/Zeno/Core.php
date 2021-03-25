@@ -44,6 +44,7 @@ class Core extends PluginBase implements Listener {
 
         SelectAPI::registerSelector(new SelectAllPlayers());
         SelectAPI::registerSelector(new SelectRandomPlayers());
+        $this->getServer()->getPluginManager()->registerEvents(new Items\Soup(), $this);
         $this->getScheduler()->scheduleRepeatingTask(new ParticleTask($this), 10);
         $this->getScheduler()->scheduleRepeatingTask(new BroadcastMessageTask($this), 10000);
         $this->initCommands();
