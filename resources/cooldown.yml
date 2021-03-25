@@ -1,0 +1,6 @@
+#Cooldown in seconds
+cooldown: 10
+
+#Cooldown message, use {cooldown} for the time.
+#Color - Use § for color as you normally would in Minecraft
+message: "§a{cooldown}"

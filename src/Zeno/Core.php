@@ -5,7 +5,7 @@ namespace Zeno;
 use Zeno\API\{SanctionAPI, SelectAPI, ServerAPI};
 use Zeno\Commands\{Ban, Banlist, Gamemode, Kick, KickAll, Kit, Knockback, Mute, Mutelist, Online, Ping, Say, Size, Spawn, Tell, TpRandom, TPS, Unban, Unmute};
 use Zeno\Form\FormUI;
-use Zeno\Events\{PlayerChat, PlayerCreation, PlayerDeath, PlayerJoin, PlayerPreLogin};
+use Zeno\Events\{PlayerChat, PlayerCreation, PlayerDeath, PlayerExhaust, PlayerInteract, PlayerJoin, PlayerPreLogin};
 use Zeno\Others\Gadgets;
 use Zeno\Selector\{SelectAllPlayers, SelectRandomPlayers};
 use Zeno\Tasks\{BroadcastMessageTask, ParticleTask};
@@ -26,29 +26,36 @@ class Core extends PluginBase implements Listener {
     public $green = array();
     public $blue = array();
     public static $data;
+    private static $config;
     private static $instance;
 
     public function onEnable() {
         $corelaunch = TextFormat::DARK_GREEN . "[" . TextFormat::GREEN . "Zeno" . TextFormat::DARK_GREEN . "]" . TextFormat::WHITE . " ZenoCore enable !";
         $this->getLogger()->info($corelaunch);
         $this->getResource("config.yml");
+        $this->saveResource("cooldown.yml");
         $this->saveDefaultConfig();
         @mkdir($this->getDataFolder());
 
         SelectAPI::registerSelector(new SelectAllPlayers());
         SelectAPI::registerSelector(new SelectRandomPlayers());
+        $this->getScheduler()->scheduleRepeatingTask(new ParticleTask($this), 10);
         $this->getScheduler()->scheduleRepeatingTask(new BroadcastMessageTask($this), 10000);
         $this->initCommands();
         $this->initEvents();
         if (!file_exists($this->getDataFolder()."knockback.yml")) {
             $this->saveResource('knockback.yml');
-        } self::$data = new Config($this->getDataFolder() . "knockback.yml", Config::YAML);
+        }
+
+        self::$config = new Config($this->getDataFolder()."cooldown.yml", Config::YAML);
+        self::$data = new Config($this->getDataFolder() . "knockback.yml", Config::YAML);
         self::$instance = $this;
 
         $this->getServer()->loadLevel("spawn");
         $this->getServer()->loadLevel("gapple");
         $this->getServer()->loadLevel("nodebuff");
         $this->getServer()->loadLevel("soupkit");
+        $this->getServer()->loadLevel("hivesumo");
     }
 
     public function onDisable() {
@@ -104,7 +111,7 @@ class Core extends PluginBase implements Listener {
 
     private function initEvents() : void {
         $events = [$this, new PlayerChat($this), new PlayerCreation($this), new PlayerDeath($this),
-            new PlayerJoin($this), new PlayerPreLogin($this)];
+            new PlayerJoin($this), new PlayerPreLogin($this), new PlayerExhaust($this), new PlayerInteract($this)];
         foreach($events as $event){
             $this->registerEvent($event);
         }
