@@ -14,7 +14,6 @@ use pocketmine\utils\TextFormat;
 
 class Core extends PluginBase implements Listener {
 
-
     /**
      * @var Config
      */
