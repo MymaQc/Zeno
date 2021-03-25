@@ -3,27 +3,38 @@
 namespace Zeno;
 
 use Zeno\API\{SanctionAPI, SelectAPI, ServerAPI};
-use Zeno\Commands\{Ban, Banlist, Gamemode, Kick, KickAll, Knockback, Mute, Mutelist, Online, Ping, Say, Size, Tell, TpRandom, TPS, Unban, Unmute};
+use Zeno\Commands\{Ban, Banlist, Gamemode, Kick, KickAll, Kit, Knockback, Mute, Mutelist, Online, Ping, Say, Size, Spawn, Tell, TpRandom, TPS, Unban, Unmute};
+use Zeno\Form\FormUI;
 use Zeno\Events\{PlayerChat, PlayerCreation, PlayerDeath, PlayerJoin, PlayerPreLogin};
+use Zeno\Others\Gadgets;
 use Zeno\Selector\{SelectAllPlayers, SelectRandomPlayers};
+use Zeno\Tasks\{BroadcastMessageTask, ParticleTask};
 use pocketmine\command\Command;
 use pocketmine\event\Listener;
+use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat;
-use Zeno\Tasks\BroadcastMessageTask;
 
 class Core extends PluginBase implements Listener {
 
     /**
      * @var Config
      */
+    use FormUI;
+    public $red = array();
+    public $green = array();
+    public $blue = array();
     public static $data;
     private static $instance;
 
     public function onEnable() {
         $corelaunch = TextFormat::DARK_GREEN . "[" . TextFormat::GREEN . "Zeno" . TextFormat::DARK_GREEN . "]" . TextFormat::WHITE . " ZenoCore enable !";
         $this->getLogger()->info($corelaunch);
+        $this->getResource("config.yml");
+        $this->saveDefaultConfig();
+        @mkdir($this->getDataFolder());
+
         SelectAPI::registerSelector(new SelectAllPlayers());
         SelectAPI::registerSelector(new SelectRandomPlayers());
         $this->getScheduler()->scheduleRepeatingTask(new BroadcastMessageTask($this), 10000);
@@ -33,12 +44,31 @@ class Core extends PluginBase implements Listener {
             $this->saveResource('knockback.yml');
         } self::$data = new Config($this->getDataFolder() . "knockback.yml", Config::YAML);
         self::$instance = $this;
+
+        $this->getServer()->loadLevel("spawn");
+        $this->getServer()->loadLevel("gapple");
+        $this->getServer()->loadLevel("nodebuff");
+        $this->getServer()->loadLevel("soupkit");
     }
 
     public function onDisable() {
         foreach($this->getServer()->getOnlinePlayers() as $players) {
             $players->kick("Server restart", false);
         }
+    }
+
+    public function onJoin(PlayerJoinEvent $event){
+        $pl = $event->getPlayer();
+        $lvl = $pl->getLevel();
+        $pl->teleport($this->getServer()->getDefaultLevel()->getSafeSpawn());
+        $pl->setGamemode(0);
+        $pl->setHealth(20);
+        $pl->setFood(20);
+        $pl->setMaxHealth(20);
+        $pl->setScale(1);
+        $pl->setImmobile(false);
+        $pl->removeAllEffects();
+        $this->getArticulos()->give($pl);
     }
 
     private function registerCommand(Command $cmd) : void {
@@ -62,7 +92,7 @@ class Core extends PluginBase implements Listener {
 
         $cmdregister = [new Size($this), new Online($this), new Say($this), new Ban($this), new Mute($this), new TPS($this), new KickAll($this),
             new TpRandom($this), new Mutelist($this), new Ping($this), new Kick($this), new Unban($this), new Gamemode($this), new Banlist($this),
-            new Unmute($this), new Tell($this), new Knockback($this)];
+            new Unmute($this), new Tell($this), new Knockback($this), new Spawn($this), new Kit($this)];
         foreach ($cmdregister as $register) {
             $this->registerCommand($register);
         }
@@ -82,6 +112,10 @@ class Core extends PluginBase implements Listener {
 
     public static function getInstance() : Core {
         return self::$instance;
+    }
+
+    public function getArticulos() : Gadgets {
+        return new Gadgets($this);
     }
 
     public function removeTask($id) {
