@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Zeno\Events;
 
 use Zeno\Core;

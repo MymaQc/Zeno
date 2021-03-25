@@ -3,16 +3,22 @@
 namespace Zeno;
 
 use Zeno\API\{SanctionAPI, SelectAPI, ServerAPI};
-use Zeno\Commands\{Ban, Banlist, Gamemode, Kick, KickAll, Mute, Mutelist, Online, Ping, Say, Size, Tell, TpRandom, TPS, Unban, Unmute};
-use Zeno\Events\{PlayerChat, PlayerDeath, PlayerJoin, PlayerPreLogin};
+use Zeno\Commands\{Ban, Banlist, Gamemode, Kick, KickAll, Knockback, Mute, Mutelist, Online, Ping, Say, Size, Tell, TpRandom, TPS, Unban, Unmute};
+use Zeno\Events\{PlayerChat, PlayerCreation, PlayerDeath, PlayerJoin, PlayerPreLogin};
 use Zeno\Selector\{SelectAllPlayers, SelectRandomPlayers};
 use pocketmine\command\Command;
 use pocketmine\event\Listener;
 use pocketmine\plugin\PluginBase;
+use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat;
 
 class Core extends PluginBase implements Listener {
 
+
+    /**
+     * @var Config
+     */
+    public static $data;
     private static $instance;
 
     public function onEnable() {
@@ -22,6 +28,9 @@ class Core extends PluginBase implements Listener {
         SelectAPI::registerSelector(new SelectRandomPlayers());
         $this->initCommands();
         $this->initEvents();
+        if (!file_exists($this->getDataFolder()."knockback.yml")) {
+            $this->saveResource('knockback.yml');
+        } self::$data = new Config($this->getDataFolder() . "knockback.yml", Config::YAML);
         self::$instance = $this;
     }
 
@@ -52,7 +61,7 @@ class Core extends PluginBase implements Listener {
 
         $cmdregister = [new Size($this), new Online($this), new Say($this), new Ban($this), new Mute($this), new TPS($this), new KickAll($this),
             new TpRandom($this), new Mutelist($this), new Ping($this), new Kick($this), new Unban($this), new Gamemode($this), new Banlist($this),
-            new Unmute($this), new Tell($this)];
+            new Unmute($this), new Tell($this), new Knockback($this)];
         foreach ($cmdregister as $register) {
             $this->registerCommand($register);
         }
@@ -63,7 +72,8 @@ class Core extends PluginBase implements Listener {
     }
 
     private function initEvents() : void {
-        $events = [$this, new PlayerChat($this), new PlayerDeath($this), new PlayerJoin($this), new PlayerPreLogin($this)];
+        $events = [$this, new PlayerChat($this), new PlayerCreation($this), new PlayerDeath($this),
+            new PlayerJoin($this), new PlayerPreLogin($this)];
         foreach($events as $event){
             $this->registerEvent($event);
         }

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Zeno\Commands;
 
 use Zeno\Core;
