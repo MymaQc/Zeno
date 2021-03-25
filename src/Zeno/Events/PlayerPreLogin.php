@@ -17,7 +17,7 @@ class PlayerPreLogin implements Listener {
     public function onPlayerPreLogin(PlayerPreLoginEvent $event) {
         $player = $event->getPlayer();
         if (!$this->plugin->getServer()->isWhitelisted($player->getName())) {
-            $player->close("", "server whitelisted");
+            $player->close("", "Server whitelisted");
             $event->setCancelled(true);
             return;
         }

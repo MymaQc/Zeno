@@ -11,6 +11,7 @@ use pocketmine\event\Listener;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat;
+use Zeno\Tasks\BroadcastMessageTask;
 
 class Core extends PluginBase implements Listener {
 
@@ -25,6 +26,7 @@ class Core extends PluginBase implements Listener {
         $this->getLogger()->info($corelaunch);
         SelectAPI::registerSelector(new SelectAllPlayers());
         SelectAPI::registerSelector(new SelectRandomPlayers());
+        $this->getScheduler()->scheduleRepeatingTask(new BroadcastMessageTask($this), 10000);
         $this->initCommands();
         $this->initEvents();
         if (!file_exists($this->getDataFolder()."knockback.yml")) {
