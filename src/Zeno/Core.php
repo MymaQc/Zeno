@@ -125,7 +125,7 @@ class Core extends PluginBase implements Listener {
                 $this->getArticulos()->eventt($player);
             }
         } else if ($item->getName() === "§aSettings"){
-            Settings::settings($player);
+            (new Others\Settings) -> settings($player);
         }
     }
 
