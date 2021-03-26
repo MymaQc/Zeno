@@ -25,6 +25,7 @@ class Core extends PluginBase implements Listener {
     /**
      * @var Config
      */
+    
     use FormUI;
     public $red = array();
     public $green = array();
