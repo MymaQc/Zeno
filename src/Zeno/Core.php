@@ -2,20 +2,20 @@
 
 namespace Zeno;
 
-use pocketmine\event\player\PlayerInteractEvent;
-use pocketmine\event\player\PlayerQuitEvent;
-use pocketmine\event\player\PlayerRespawnEvent;
-use pocketmine\Player;
 use Zeno\API\{SanctionAPI, SelectAPI, ServerAPI};
 use Zeno\Commands\{Ban, Banlist, Gamemode, Kick, KickAll, Kit, Knockback, Mute, Mutelist, Online, Ping, Say, Size, Spawn, Tell, TpRandom, TPS, Unban, Unmute};
+use Zeno\Events\{EntityDamage, EntityDamageByEntity, PlayerChat, PlayerCreation, PlayerDeath, PlayerExhaust, PlayerInteract, PlayerJoin, PlayerPreLogin};
 use Zeno\Form\FormUI;
-use Zeno\Events\{EntityDamageByEntity, PlayerChat, PlayerCreation, PlayerDeath, PlayerExhaust, PlayerInteract, PlayerJoin, PlayerPreLogin};
 use Zeno\Others\{Gadgets, Settings};
 use Zeno\Selector\{SelectAllPlayers, SelectRandomPlayers};
 use Zeno\Tasks\{BroadcastMessageTask, ParticleTask};
 use pocketmine\command\Command;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerJoinEvent;
+use pocketmine\event\player\PlayerInteractEvent;
+use pocketmine\event\player\PlayerQuitEvent;
+use pocketmine\event\player\PlayerRespawnEvent;
+use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat;
@@ -164,7 +164,7 @@ class Core extends PluginBase implements Listener {
     private function initEvents() : void {
         $events = [$this, new PlayerChat($this), new PlayerCreation($this), new PlayerDeath($this),
             new PlayerJoin($this), new PlayerPreLogin($this), new PlayerExhaust($this), new PlayerInteract($this),
-            new EntityDamageByEntity($this)];
+            new EntityDamage($this), new EntityDamageByEntity($this)];
         foreach($events as $event){
             $this->registerEvent($event);
         }
