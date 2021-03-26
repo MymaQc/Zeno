@@ -123,9 +123,6 @@ class SplashPotion extends Throwable {
         return $this->getDataFlag(self::DATA_FLAGS, self::DATA_FLAG_LINGER);
     }
 
-    /**
-     * Sets whether this splash potion will create an area-effect-cloud when it lands.
-     */
     public function setLinger(bool $value = true) : void {
         $this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_LINGER, $value);
     }

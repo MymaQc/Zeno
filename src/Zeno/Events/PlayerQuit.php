@@ -18,9 +18,7 @@ class PlayerQuit implements Listener {
         $player = $event->getPlayer();
         $name = $player->getName();
         $event->setQuitMessage("");
-        foreach($this->plugin->getServer()->getOnlinePlayers() as $players){
-            $players->sendPopup("§c- {$name} -");
-        }
+        $this->plugin->getServer()->broadcastPopup("§c- {$name} -");
     }
 
 }

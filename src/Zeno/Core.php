@@ -79,7 +79,7 @@ class Core extends PluginBase implements Listener {
 
     public function onDisable() {
         foreach($this->getServer()->getOnlinePlayers() as $players) {
-            $players->kick("Server restart", false);
+            $players->kick("§aServer restart", false);
         }
     }
 
@@ -131,13 +131,13 @@ class Core extends PluginBase implements Listener {
         }
 
         self::$cooldown[$player->getName()] = time()+1;
-        if ($item->getName() == "§aFFA") {
+        if ($item->getName() == "§r§aFFA") {
             $this->getArticulos()->MiniGM($player);
-        } else if ($item->getName() == "§aEvent") {
+        } else if ($item->getName() == "§r§aEvent") {
             if ($player instanceof Player) {
                 $this->getArticulos()->eventt($player);
             }
-        } else if ($item->getName() === "§aSettings"){
+        } else if ($item->getName() === "§r§aSettings"){
             (new Others\Settings) -> settings($player);
         }
     }

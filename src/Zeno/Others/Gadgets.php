@@ -28,9 +28,9 @@ class Gadgets {
     public function give($player) {
         $player->getInventory()->clearAll();
         $player->getArmorInventory()->clearAll();
-        $player->getInventory()->setItem(4, Item ::get(345, 0, 1)->setCustomName("§aFFA"));
-        $player->getInventory()->setItem(1, Item ::get(388, 0, 1)->setCustomName("§aEvent"));
-        $player->getInventory()->setItem(7, Item ::get(399, 0, 1)->setCustomName("§aSettings"));
+        $player->getInventory()->setItem(4, Item::get(345, 0, 1)->setCustomName("§r§aFFA"));
+        $player->getInventory()->setItem(1, Item::get(388, 0, 1)->setCustomName("§r§aEvent"));
+        $player->getInventory()->setItem(7, Item::get(399, 0, 1)->setCustomName("§r§aSettings"));
     }
 
     public function MiniGM($player) : SimpleForm {
@@ -117,7 +117,7 @@ class Gadgets {
                     break;
                 case "hivesumo":
                     $player->sendMessage("§l§a» §r§fYou have been teleported to the §aHive Sumo Arena §f!");
-                    $player->teleport(Server ::getInstance()->getLevelByName('hivesumo')->getSafeSpawn());
+                    $player->teleport(Server::getInstance()->getLevelByName('hivesumo')->getSafeSpawn());
                     $player->getArmorInventory()->clearAll();
                     $player->removeAllEffects();
                     $player->getInventory()->clearAll();
@@ -125,7 +125,7 @@ class Gadgets {
                     $player->setFood(20);
                     $player->setSaturation(20);
 
-                    $boots2 = Item ::get(Item::CHAIN_BOOTS, 0, 1);
+                    $boots2 = Item::get(Item::CHAIN_BOOTS, 0, 1);
                     $player->getArmorInventory()->setBoots($boots2);
 
                     $effect2 = new EffectInstance(Effect::getEffect(Effect::RESISTANCE));
@@ -176,6 +176,7 @@ class Gadgets {
                     break;
             }
         });
+
         $nodebuff = $this->plugin->getServer()->getLevelByName("nodebuff");
         $gapple = $this->plugin->getServer()->getLevelByName("gapple");
         $hivesumo = $this->plugin->getServer()->getLevelByName("hivesumo");
@@ -186,7 +187,7 @@ class Gadgets {
             $c1 = "offline";
         } else {
             $totalnodebuff = count($nodebuff->getPlayers());
-            $count1 = "§fCurrently Playing: §2" . $totalnodebuff;
+            $count1 = "§8Currently Playing: " . $totalnodebuff;
             $c1 = "nodebuff";
         }
         if (!$this->plugin->getServer()->isLevelLoaded("gapple")) {
@@ -194,21 +195,21 @@ class Gadgets {
             $c2 = "offline";
         } else {
             $totalgapple = count($gapple->getPlayers());
-            $count2 = "§fCurrently Playing: §2" . $totalgapple;
+            $count2 = "§8Currently Playing: " . $totalgapple;
             $c2 = "gapple";
         }
         if (!$this->plugin->getServer()->isLevelLoaded("hivesumo")) {
             $count4 = "§cOffline";
             $c4 = "offline";
         } else {
-            $count4 = "§fCurrently Playing: §2" . count($hivesumo->getPlayers());
+            $count4 = "§8Currently Playing: " . count($hivesumo->getPlayers());
             $c4 = "hivesumo";
         }
         if (!$this->plugin->getServer()->isLevelLoaded("soupkit")) {
             $count5 = "§cOffline";
             $c5 = "offline";
         } else {
-            $count5 = "§fCurrently Playing: §2" . count($soup -> getPlayers());
+            $count5 = "§8Currently Playing: " . count($soup -> getPlayers());
             $c5 = "soupkit";
         }
 
@@ -232,22 +233,21 @@ class Gadgets {
                     if ($player->hasPermission("nick.use")) {
                         $this->plugin->getServer()->dispatchCommand($player, $this->plugin->getConfig()->get("command8"));
                     } else {
-                        $player->sendMessage("§0- §6Vous n'avez pas la permission d'effectué ceci §0-");
-
+                        $player->sendMessage("§l§a» §r§cYou do not have permission to use this command !");
                     }
                     break;
                 case 1:
                     if ($player instanceof Player) {
                         $this->Particles($player);
                     } else {
-                        $player->sendMessage("§0- §6Vous n'avez pas la permission d'effectué ceci §0-");
+                        $player->sendMessage("§l§a» §r§cYou do not have permission to use this particle !");
                     }
                     break;
                 case 2:
                     if ($player->hasPermission("core.cape")) {
                         $this->plugin->getServer()->dispatchCommand($player, $this->plugin->getConfig()->get("command7"));
                     } else {
-                        $player->sendMessage("§0- §6Vous n'avez pas la permission d'effectué ceci §0-");
+                        $player->sendMessage("§l§a» §r§cYou do not have permission to use this command !");
                     }
                     break;
                 case 3:
@@ -275,7 +275,7 @@ class Gadgets {
                     if ($player->hasPermission("core.blue")) {
                         if (!in_array($player->getName(), $this->plugin->blue)) {
                             $this->plugin->blue[] = $player->getName();
-                            $player->sendMessage(TE::WHITE . "Vous avez séléctionné les particules " . TE::BLUE . "bleu");
+                            $player->sendMessage("§l§a» §r§fYou chose the §9blue particle §f!");
                             if (in_array($player->getName(), $this->plugin->red)) {
                                 unset($this->plugin->red[array_search($player->getName(), $this->plugin->red)]);
                             } elseif (in_array($player->getName(), $this -> plugin->green)) {
@@ -283,17 +283,17 @@ class Gadgets {
                             }
                         } else {
                             unset($this->plugin->blue[array_search($player->getName(), $this->plugin->blue)]);
-                            $player->sendMessage(TE::WHITE . "Vous avez séléctionné les particules " . TE::BLUE . "bleu");
+                            $player->sendMessage("§l§a» §r§fYou chose the §9blue particle §f!");
                         }
                     } else {
-                        $player->sendMessage("§0- §6Vous n'avez pas la permission d'effectué ceci §0-");
+                        $player->sendMessage("§l§a» §r§cYou do not have permission to use this particle !");
                     }
                     break;
                 case 1:
                     if ($player->hasPermission("core.red")) {
                         if (!in_array($player->getName(), $this->plugin->red)) {
                             $this->plugin->red[] = $player->getName();
-                            $player->sendMessage(TE::WHITE . "Vous avez séléctionné les particules " . TE::RED . "rouge");
+                            $player->sendMessage("§l§a» §r§fYou chose the §cred particle §f!");
                             if (in_array($player->getName(), $this->plugin->blue)) {
                                 unset($this->plugin->blue[array_search($player->getName(), $this->plugin->blue)]);
                             } elseif (in_array($player->getName(), $this->plugin->green)) {
@@ -301,17 +301,17 @@ class Gadgets {
                             }
                         } else {
                             unset($this->plugin->red[array_search($player->getName(), $this->plugin->red)]);
-                            $player->sendMessage(TE::WHITE . "Vous avez séléctionné les particules " . TE::RED . "rouge");
+                            $player->sendMessage("§l§a» §r§fYou chose the §cred particle §f!");
                         }
                     } else {
-                        $player->sendMessage("§0- §6Vous n'avez pas la permission d'effectué ceci §0-");
+                        $player->sendMessage("§l§a» §r§cYou do not have permission to use this particle !");
                     }
                     break;
                 case 2:
                     if ($player->hasPermission("core.green")) {
                         if (!in_array($player->getName(), $this->plugin->green)) {
                             $this->plugin->green[] = $player->getName();
-                            $player->sendMessage(TE::WHITE . "Vous avez séléctionné les particules " . TE::GREEN . "verte");
+                            $player->sendMessage("§l§a» §r§fYou chose the §agreen particle §f!");
                             if (in_array($player->getName(), $this->plugin->blue)) {
                                 unset($this->plugin->blue[array_search($player->getName(), $this->plugin->blue)]);
                             } elseif (in_array($player->getName(), $this->plugin->red)) {
@@ -319,10 +319,10 @@ class Gadgets {
                             }
                         } else {
                             unset($this->plugin->green[array_search($player->getName(), $this->plugin->green)]);
-                            $player->sendMessage(TE::WHITE . "Vous avez séléctionné les particules " . TE::GREEN . "verte");
+                            $player->sendMessage("§l§a» §r§fYou chose the §agreen particle §f!");
                         }
                     } else {
-                        $player->sendMessage("§0- §6Vous n'avez pas la permission d'effectué ceci §0-");
+                        $player->sendMessage("§l§a» §r§cYou do not have permission to use this particle !");
                     }
                     break;
                 case 3:
