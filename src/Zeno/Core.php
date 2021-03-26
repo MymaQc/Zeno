@@ -12,7 +12,7 @@ use Zeno\Form\FormUI;
 use Zeno\Listener\PotionListener;
 use Zeno\Others\{Gadgets, Settings};
 use Zeno\Selector\{SelectAllPlayers, SelectRandomPlayers};
-use Zeno\Tasks\{BroadcastMessageTask, ParticleTask};
+use Zeno\Tasks\{BorderTask, BroadcastMessageTask, ParticleTask};
 use pocketmine\command\Command;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerJoinEvent;
@@ -58,6 +58,7 @@ class Core extends PluginBase implements Listener {
 
         $this->getServer()->getPluginManager()->registerEvents(new Items\Soup(), $this);
         $this->getScheduler()->scheduleRepeatingTask(new ParticleTask($this), 10);
+        $this->getScheduler()->scheduleRepeatingTask(new BorderTask($this), 20*5);
         $this->getScheduler()->scheduleRepeatingTask(new BroadcastMessageTask($this), 10000);
         $this->initCommands();
         $this->initEvents();
