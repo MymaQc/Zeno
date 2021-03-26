@@ -48,12 +48,4 @@ class PlayerJoin implements Listener {
             }
         }
     }
-
-    public function getServer()
-    {
-    }
-
-    public function getConfig()
-    {
-    }
 }

@@ -9,7 +9,6 @@ use pocketmine\plugin\Plugin;
 
 class Kick extends PluginCommand {
 
-    private $plugin;
     protected $core;
 
     public function __construct(Core $core) {
@@ -40,8 +39,8 @@ class Kick extends PluginCommand {
             return $sender->sendMessage("§l§a» §r§cPlayer not found.");
         }
 
-        $this->plugin->getServer()->broadcastMessage("\n§a" . $name . "§f was kicked from Zeno by §a" . $sender->getName() . "§f for §c" . $raison . " §f!");
-        $this->plugin->getServer()->broadcastMessage("\n");
+        $this->core->getServer()->broadcastMessage("\n§a" . $name . "§f was kicked from Zeno by §a" . $sender->getName() . "§f for §c" . $raison . " §f!");
+        $this->core->getServer()->broadcastMessage("\n");
         $victime->kick("§cYou are kicked from Zeno Practice by " . $sender->getName() . "\n§cYou were kicked for: §7" . $raison, false);
         return true;
     }

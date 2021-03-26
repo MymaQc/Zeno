@@ -29,13 +29,13 @@ class Gamemode extends PluginCommand {
 
         switch ($args[0]) {
             case 0:
-                $gamemode = "Survie"; break;
+                $gamemode = "Survival"; break;
             case 1:
-                $gamemode = "Créatif"; break;
+                $gamemode = "Creative"; break;
             case 2:
-                $gamemode = "Aventure"; break;
+                $gamemode = "Adventure"; break;
             case 3:
-                $gamemode = "Spectateur"; break;
+                $gamemode = "Spectator"; break;
             default:
                 return $sender->sendMessage("§l§a» §r§cUsage: /gamemode (0/1/2/3) (name) !");
         }
@@ -48,13 +48,13 @@ class Gamemode extends PluginCommand {
             if(!$this->plugin->getServer()->getPlayer($args[1]))$sender->sendMessage("§l§a» §r§c " . $args[1] . " §cis not connected.");
             $targetPlayer = $this->plugin->getServer()->getPlayer($args[1]);
             $targetPlayer->setGamemode((int)$args[0]);
-            $targetPlayer->sendMessage("§l§a» §r§fYou are now in mode §a{$gamemode} §f!");
-            $sender->sendMessage("§l§a» §r§fYou put §a" . $targetPlayer->getName() . "§f in mod §a{$gamemode} §f!");
+            $targetPlayer->sendMessage("§l§a» §r§fYou are now in §a{$gamemode} Mod §f!");
+            $sender->sendMessage("§l§a» §r§fYou put §a" . $targetPlayer->getName() . "§f in §a{$gamemode} Mod §f!");
         } else if (!$sender instanceof Player) {
                 return $sender->sendMessage("§l§a» §r§cYou cannot use this command from the console !");
         } else {
             $sender->setGamemode((int)$args[0]);
-            $sender->sendMessage("§l§a» §r§fYou are now in mode §a{$gamemode} §f!");
+            $sender->sendMessage("§l§a» §r§fYou are now in §a{$gamemode} Mod §f!");
         }
         return true;
     }
