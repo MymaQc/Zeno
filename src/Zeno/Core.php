@@ -3,8 +3,10 @@
 namespace Zeno;
 
 use Zeno\API\{SanctionAPI, SelectAPI, ServerAPI};
-use Zeno\Commands\{Ban, Banlist, Gamemode, Kick, KickAll, Kit, Knockback, Mute, Mutelist, Online, Ping, Say, Size, Spawn, Tell, TpRandom, TPS, Unban, Unmute};
-use Zeno\Events\{EntityDamage, EntityDamageByEntity, PlayerChat, PlayerCreation, PlayerDeath, PlayerExhaust, PlayerInteract, PlayerJoin, PlayerPreLogin};
+use Zeno\Commands\{Ban, Banlist, Gamemode, Kick, KickAll, Kit, Knockback, Mute, Mutelist, Online, Ping,
+    Say, Size, Spawn, Tell, TpRandom, TPS, Unban, Unmute};
+use Zeno\Events\{BlockBreak, EntityDamage, EntityDamageByEntity, PlayerChat, PlayerCreation, PlayerDeath,
+    PlayerDropItem, PlayerExhaust, PlayerInteract, PlayerJoin, PlayerPreLogin};
 use Zeno\Form\FormUI;
 use Zeno\Others\{Gadgets, Settings};
 use Zeno\Selector\{SelectAllPlayers, SelectRandomPlayers};
@@ -164,7 +166,7 @@ class Core extends PluginBase implements Listener {
     private function initEvents() : void {
         $events = [$this, new PlayerChat($this), new PlayerCreation($this), new PlayerDeath($this),
             new PlayerJoin($this), new PlayerPreLogin($this), new PlayerExhaust($this), new PlayerInteract($this),
-            new EntityDamage($this), new EntityDamageByEntity($this)];
+            new EntityDamage($this), new EntityDamageByEntity($this), new BlockBreak($this), new PlayerDropItem($this)];
         foreach($events as $event){
             $this->registerEvent($event);
         }

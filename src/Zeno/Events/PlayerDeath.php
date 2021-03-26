@@ -2,10 +2,10 @@
 
 namespace Zeno\Events;
 
-use pocketmine\event\player\PlayerDeathEvent;
 use Zeno\Core;
 use Zeno\API\ServerAPI;
 use pocketmine\event\Listener;
+use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 
 class PlayerDeath implements Listener {
