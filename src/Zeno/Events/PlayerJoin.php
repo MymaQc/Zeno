@@ -20,6 +20,8 @@ class PlayerJoin implements Listener {
         if ($event->getPlayer() instanceof Player) {
             $player = $event->getPlayer();
             $name = $player->getName();
+            $event->setJoinMessage("");
+            $this->plugin->getServer()->broadcastPopup("§a+ {$name} +");
             if ($this->plugin->getSanctionAPI()->isBanned(strtolower($name))) {
                 $ban = $this->plugin->getSanctionAPI()->GetBan(strtolower($name));
                 $ban = explode(":", $ban);
