@@ -5,9 +5,11 @@ namespace Zeno;
 use Zeno\API\{SanctionAPI, SelectAPI, ServerAPI};
 use Zeno\Commands\{Ban, Banlist, Gamemode, Kick, KickAll, Kit, Knockback, Mute, Mutelist, Online, Ping,
     Say, Size, Spawn, Tell, TpRandom, TPS, Unban, Unmute};
+use Zeno\Entity\{EnderPearl, SplashPotion};
 use Zeno\Events\{BlockBreak, EntityDamage, EntityDamageByEntity, PlayerChat, PlayerCreation, PlayerDeath,
     PlayerDropItem, PlayerExhaust, PlayerInteract, PlayerJoin, PlayerPreLogin};
 use Zeno\Form\FormUI;
+use Zeno\Listener\PotionListener;
 use Zeno\Others\{Gadgets, Settings};
 use Zeno\Selector\{SelectAllPlayers, SelectRandomPlayers};
 use Zeno\Tasks\{BroadcastMessageTask, ParticleTask};
@@ -45,8 +47,15 @@ class Core extends PluginBase implements Listener {
         $this->saveDefaultConfig();
         @mkdir($this->getDataFolder());
 
+        Item::initCreativeItems();
         SelectAPI::registerSelector(new SelectAllPlayers());
         SelectAPI::registerSelector(new SelectRandomPlayers());
+        Entity::registerEntity(SplashPotion::class, false, ['ThrownPotion', 'minecraft:potion', 'thrownpotion']);
+        Entity::registerEntity(EnderPearl::class, false, ['ThrownEnderpearl', 'minecraft:ender_pearl']);
+        for($i = 37; $i <= 42; $i++) {
+            Item::removeCreativeItem(Item::get(Item::SPLASH_POTION, $i));
+        }
+
         $this->getServer()->getPluginManager()->registerEvents(new Items\Soup(), $this);
         $this->getScheduler()->scheduleRepeatingTask(new ParticleTask($this), 10);
         $this->getScheduler()->scheduleRepeatingTask(new BroadcastMessageTask($this), 10000);
@@ -166,9 +175,21 @@ class Core extends PluginBase implements Listener {
     private function initEvents() : void {
         $events = [$this, new PlayerChat($this), new PlayerCreation($this), new PlayerDeath($this),
             new PlayerJoin($this), new PlayerPreLogin($this), new PlayerExhaust($this), new PlayerInteract($this),
-            new EntityDamage($this), new EntityDamageByEntity($this), new BlockBreak($this), new PlayerDropItem($this)];
+            new EntityDamage($this), new EntityDamageByEntity($this), new BlockBreak($this), new PlayerDropItem($this),
+            new PotionListener($this)];
         foreach($events as $event){
             $this->registerEvent($event);
+        }
+    }
+
+    private function registerItem($item, $truefalse) : void {
+        ItemFactory::registerItem($item, $truefalse);
+    }
+
+    private function initItems() : void {
+        $items = new Items\EnderPearl();
+        foreach($items as $item) {
+            $this->registerItem($item, true);
         }
     }
 
