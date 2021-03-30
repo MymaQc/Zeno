@@ -10,7 +10,7 @@ use Zeno\Events\{BlockBreak, EntityDamage, EntityDamageByEntity, PlayerChat, Pla
     PlayerDropItem, PlayerExhaust, PlayerInteract, PlayerJoin, PlayerPreLogin};
 use Zeno\Form\FormUI;
 use Zeno\Listener\PotionListener;
-use Zeno\Others\{Gadgets, Settings};
+use Zeno\Others\{Gadgets};
 use Zeno\Selector\{SelectAllPlayers, SelectRandomPlayers};
 use Zeno\Tasks\{BorderTask, BroadcastMessageTask, ParticleTask};
 use pocketmine\command\Command;
@@ -19,6 +19,9 @@ use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\event\player\PlayerRespawnEvent;
+use pocketmine\entity\Entity;
+use pocketmine\item\Item;
+use pocketmine\item\ItemFactory;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
