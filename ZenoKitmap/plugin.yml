@@ -1,0 +1,5 @@
+name: ZenoKitmap
+author: Myma
+version: 1
+main: Zeno\Core
+api: 3.9.0

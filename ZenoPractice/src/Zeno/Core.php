@@ -40,7 +40,7 @@ class Core extends PluginBase implements Listener {
     private static $instance;
 
     public function onEnable() {
-        $corelaunch = TextFormat::DARK_GREEN . "[" . TextFormat::GREEN . "Zeno" . TextFormat::DARK_GREEN . "]" . TextFormat::WHITE . " ZenoCore enable !";
+        $corelaunch = TextFormat::DARK_GREEN . "[" . TextFormat::GREEN . "Zeno" . TextFormat::DARK_GREEN . "]" . TextFormat::WHITE . " ZenoPractice plugin enable !";
         $this->getLogger()->info($corelaunch);
         $this->getResource("config.yml");
         $this->saveResource("cooldown.yml");
