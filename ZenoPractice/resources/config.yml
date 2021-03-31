@@ -1,0 +1,10 @@
+---
+command1: "rr create"
+command2: "rr join"
+command3: "sumo"
+command4: "combo"
+command5: "gapple"
+command6: "fist"
+command7: "cape"
+command8: "nick"
+...
