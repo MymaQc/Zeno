@@ -21,11 +21,12 @@ class PlayerDeath implements Listener {
         $name = $player->getName();
         $event->setDrops([]);
         $event->setDeathMessage("");
-        if ($player->getLastDamageCause()->getCause() === EntityDamageByEntityEvent::CAUSE_ENTITY_ATTACK) {
-            $nameD = $player->getLastDamageCause()->getDamager()->getName();
-            $ppots = ServerAPI::getPotionsCount($player);
-            $dpots = ServerAPI::getPotionsCount($player->getLastDamageCause()->getDamager());
-            $event->setDeathMessage("§c{$name} [{$ppots} POTS] §7was killed by §a{$nameD} [$dpots POTS] §7!");
+        if ($player->getLastDamageCause()->getCause() === EntityDamageByEntityEvent::CAUSE_ENTITY_ATTACK and
+            $player->getLevel()->getFolderName() == "nodebuff") {
+                $nameD = $player->getLastDamageCause()->getDamager()->getName();
+                $ppots = ServerAPI::getPotionsCount($player);
+                $dpots = ServerAPI::getPotionsCount($player->getLastDamageCause()->getDamager());
+                $event->setDeathMessage("§c{$name} [{$ppots} POTS] §7was killed by §a{$nameD} [$dpots POTS] §7!");
         }
     }
 

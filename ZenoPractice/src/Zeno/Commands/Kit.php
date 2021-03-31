@@ -3,12 +3,10 @@
 
 namespace Zeno\Commands;
 
-
-use Corepractice\Main;
-use Corepractice\Others\KitForms;
+use Zeno\Core;
+use Zeno\Others\KitForms;
 use pocketmine\command\CommandSender;
 use pocketmine\command\PluginCommand;
-use Zeno\Core;
 
 class Kit extends PluginCommand {
 
@@ -21,7 +19,8 @@ class Kit extends PluginCommand {
     }
 
     public function execute(CommandSender $sender, $label, array $args) {
-        if ($sender->getLevel()->getFolderName() == "soupkit") {
+        $player = $sender->getPlayer();
+        if ($player->getLevel()->getFolderName() == "soupkit") {
             KitForms::kit($sender);
             return true;
         } else {
