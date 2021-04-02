@@ -6,8 +6,18 @@ use Zeno\API\{SanctionAPI, SelectAPI, ServerAPI};
 use Zeno\Commands\{Ban, Banlist, Gamemode, Kick, KickAll, Kit, Knockback, Mute, Mutelist, Online, Ping,
     Say, Size, Spawn, Tell, TpRandom, TPS, Unban, Unmute};
 use Zeno\Entity\{EnderPearl, SplashPotion};
-use Zeno\Events\{BlockBreak, EntityDamage, EntityDamageByEntity, PlayerChat, PlayerCreation, PlayerDeath,
-    PlayerDropItem, PlayerExhaust, PlayerInteract, PlayerJoin, PlayerPreLogin};
+use Zeno\Events\{BlockBreak,
+    CommandPreprocess,
+    EntityDamage,
+    EntityDamageByEntity,
+    PlayerChat,
+    PlayerCreation,
+    PlayerDeath,
+    PlayerDropItem,
+    PlayerExhaust,
+    PlayerInteract,
+    PlayerJoin,
+    PlayerPreLogin};
 use Zeno\Form\FormUI;
 use Zeno\Listener\PotionListener;
 use Zeno\Others\Gadgets;
@@ -180,7 +190,7 @@ class Core extends PluginBase implements Listener {
         $events = [$this, new PlayerChat($this), new PlayerCreation($this), new PlayerDeath($this),
             new PlayerJoin($this), new PlayerPreLogin($this), new PlayerExhaust($this), new PlayerInteract($this),
             new EntityDamage($this), new EntityDamageByEntity($this), new BlockBreak($this), new PlayerDropItem($this),
-            new PotionListener($this)];
+            new PotionListener($this), new CommandPreprocess($this)];
         foreach($events as $event){
             $this->registerEvent($event);
         }
