@@ -9,7 +9,6 @@ use Zeno\Entity\{EnderPearl, SplashPotion};
 use Zeno\Events\{BlockBreak,
     CommandPreprocess,
     EntityDamage,
-    EntityDamageByEntity,
     PlayerChat,
     PlayerCreation,
     PlayerDeath,
@@ -190,7 +189,7 @@ class Core extends PluginBase implements Listener {
     private function initEvents() : void {
         $events = [$this, new PlayerChat($this), new PlayerCreation($this), new PlayerDeath($this),
             new PlayerJoin($this), new PlayerPreLogin($this), new PlayerExhaust($this), new PlayerInteract($this),
-            new EntityDamage($this), new EntityDamageByEntity($this), new BlockBreak($this), new PlayerDropItem($this),
+            new EntityDamage($this), new BlockBreak($this), new PlayerDropItem($this),
             new PotionListener($this), new CommandPreprocess($this), new PlayerQuit($this)];
         foreach($events as $event){
             $this->registerEvent($event);

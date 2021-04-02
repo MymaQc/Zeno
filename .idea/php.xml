@@ -2,8 +2,8 @@
 <project version="4">
   <component name="PhpIncludePathManager">
     <include_path>
-      <path value="$PROJECT_DIR$/../../API/src" />
-      <path value="$PROJECT_DIR$/../../API/vendor" />
+      <path value="$USER_HOME$/Desktop/API/src" />
+      <path value="$USER_HOME$/Desktop/API/vendor" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.3">

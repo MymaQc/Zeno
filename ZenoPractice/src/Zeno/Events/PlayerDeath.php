@@ -10,6 +10,7 @@ use pocketmine\event\entity\EntityDamageByEntityEvent;
 
 class PlayerDeath implements Listener {
 
+    private static $cooldown;
     private $plugin;
 
     public function __construct(Core $plugin) {
@@ -18,6 +19,7 @@ class PlayerDeath implements Listener {
 
     function onPlayerDeath(PlayerDeathEvent $event) {
         $player = $event->getPlayer();
+        self::$cooldown[$player->getName()] = time()+1;
         $name = $player->getName();
         $event->setDrops([]);
         $event->setDeathMessage("");
