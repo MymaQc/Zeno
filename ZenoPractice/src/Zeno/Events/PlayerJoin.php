@@ -19,6 +19,16 @@ class PlayerJoin implements Listener {
     public function PlayerJoin(PlayerJoinEvent $event) {
         if ($event->getPlayer() instanceof Player) {
             $player = $event->getPlayer();
+            $lvl = $player->getLevel();
+            $player->teleport($this->plugin->getServer()->getDefaultLevel()->getSafeSpawn());
+            $player->setGamemode(0);
+            $player->setHealth(20);
+            $player->setFood(20);
+            $player->setMaxHealth(20);
+            $player->setScale(1);
+            $player->setImmobile(false);
+            $player->removeAllEffects();
+            $this->plugin->getArticulos()->give($player);
             $name = $player->getName();
             $event->setJoinMessage("");
             $this->plugin->getServer()->broadcastPopup("§a+ {$name} +");

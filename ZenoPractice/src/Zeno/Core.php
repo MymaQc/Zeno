@@ -6,8 +6,9 @@ use Zeno\API\{SanctionAPI, SelectAPI, ServerAPI};
 use Zeno\Commands\{Ban, Banlist, Gamemode, Kick, KickAll, Kit, Knockback, Mute, Mutelist, Online, Ping,
     Say, Size, Spawn, Tell, TpRandom, TPS, Unban, Unmute};
 use Zeno\Entity\{EnderPearl, SplashPotion};
-use Zeno\Events\{BlockBreak, EntityDamage, EntityDamageByEntity, PlayerChat, PlayerCreation, PlayerDeath,
-    PlayerDropItem, PlayerExhaust, PlayerInteract, PlayerJoin, PlayerPreLogin};
+use Zeno\Events\{BlockBreak, DataPacketReceive, EntityDamage, EntityDamageByEntity,
+    PlayerChat, PlayerCreation, PlayerDeath, PlayerDropItem, PlayerExhaust, PlayerInteract,
+    PlayerJoin, PlayerPreLogin};
 use Zeno\Form\FormUI;
 use Zeno\Listener\PotionListener;
 use Zeno\Others\{Gadgets};
@@ -25,7 +26,6 @@ use pocketmine\item\ItemFactory;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
-use pocketmine\utils\TextFormat;
 
 class Core extends PluginBase implements Listener {
 
@@ -43,7 +43,7 @@ class Core extends PluginBase implements Listener {
     private static $instance;
 
     public function onEnable() {
-        $corelaunch = TextFormat::DARK_GREEN . "[" . TextFormat::GREEN . "Zeno" . TextFormat::DARK_GREEN . "]" . TextFormat::WHITE . " ZenoPractice plugin enable !";
+        $corelaunch = "§2[§aZeno§2] §fZenoPractice plugin enable !";
         $this->getLogger()->info($corelaunch);
         $this->getResource("config.yml");
         $this->saveResource("cooldown.yml");
@@ -86,65 +86,6 @@ class Core extends PluginBase implements Listener {
         }
     }
 
-    public function onJoin(PlayerJoinEvent $event) {
-        $player = $event->getPlayer();
-        $lvl = $player->getLevel();
-        $player->teleport($this->getServer()->getDefaultLevel()->getSafeSpawn());
-        $player->setGamemode(0);
-        $player->setHealth(20);
-        $player->setFood(20);
-        $player->setMaxHealth(20);
-        $player->setScale(1);
-        $player->setImmobile(false);
-        $player->removeAllEffects();
-        $this->getArticulos()->give($player);
-    }
-
-    public function onQuit(PlayerQuitEvent $event) {
-        $player = $event->getPlayer();
-        $player->getInventory()->clearAll();
-        $player->getArmorInventory()->clearAll();
-        $lvl = $player->getLevel();
-    }
-
-    public function onRespawn(PlayerRespawnEvent $event) {
-        $player = $event->getPlayer();
-        $player->teleport($this->getServer()->getDefaultLevel()->getSafeSpawn());
-        $player->setGamemode(0);
-        $player->setHealth(20);
-        $player->setFood(20);
-        $player->setMaxHealth(20);
-        $player->setScale(1);
-        $player->setImmobile(false);
-        $player->removeAllEffects();
-        $player->getInventory()->clearAll();
-        $player->getArmorInventory()->clearAll();
-        $this->getArticulos()->give($player);
-    }
-
-    public function onInteract(PlayerInteractEvent $event) {
-        $player = $event->getPlayer();
-        $item = $player->getInventory()->getItemInHand();
-        if (isset(self::$cooldown[$player->getName()]) and self::$cooldown[$player->getName()] - time() > 0) {
-            return;
-        }
-
-        if (!$event->getAction() == $event::RIGHT_CLICK_BLOCK and !$event->getAction() == $event::RIGHT_CLICK_AIR) {
-            return;
-        }
-
-        self::$cooldown[$player->getName()] = time()+1;
-        if ($item->getName() == "§r§aFFA") {
-            $this->getArticulos()->MiniGM($player);
-        } else if ($item->getName() == "§r§aEvent") {
-            if ($player instanceof Player) {
-                $this->getArticulos()->eventt($player);
-            }
-        } else if ($item->getName() === "§r§aSettings"){
-            (new Others\Settings) -> settings($player);
-        }
-    }
-
     private function registerCommand(Command $cmd) : void {
         $this->getServer()->getCommandMap()->register($cmd->getName(), $cmd);
     }
@@ -180,7 +121,7 @@ class Core extends PluginBase implements Listener {
         $events = [$this, new PlayerChat($this), new PlayerCreation($this), new PlayerDeath($this),
             new PlayerJoin($this), new PlayerPreLogin($this), new PlayerExhaust($this), new PlayerInteract($this),
             new EntityDamage($this), new EntityDamageByEntity($this), new BlockBreak($this), new PlayerDropItem($this),
-            new PotionListener($this)];
+            new PotionListener($this), new DataPacketReceive($this)];
         foreach($events as $event){
             $this->registerEvent($event);
         }

@@ -16,6 +16,9 @@ class PlayerQuit implements Listener {
 
     public function PlayerQuit(PlayerQuitEvent $event) {
         $player = $event->getPlayer();
+        $player->getInventory()->clearAll();
+        $player->getArmorInventory()->clearAll();
+        $lvl = $player->getLevel();
         $name = $player->getName();
         $event->setQuitMessage("");
         $this->plugin->getServer()->broadcastPopup("§c- {$name} -");

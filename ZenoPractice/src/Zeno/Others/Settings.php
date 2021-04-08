@@ -16,7 +16,7 @@ use pocketmine\item\enchantment\EnchantmentInstance;
 use pocketmine\item\Item;
 use pocketmine\utils\TextFormat as TE;
 
-class Settings{
+class Settings {
 
     use FormUI;
 
