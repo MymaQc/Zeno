@@ -17,19 +17,10 @@ class Knockback extends Command {
         $this->plugin = $plugin;
     }
 
-    /**
-     * @return Plugin
-     */
     public function getPlugin() : Plugin {
         return $this->plugin;
     }
 
-    /**
-     * @param CommandSender $sender
-     * @param string $commandLabel
-     * @param array $args
-     * @return bool
-     */
     public function execute(CommandSender $sender, string $commandLabel, array $args) : bool {
         if ($sender->isOp()) {
             if (!empty($args[4])) {

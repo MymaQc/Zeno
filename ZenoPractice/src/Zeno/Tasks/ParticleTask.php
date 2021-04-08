@@ -9,6 +9,8 @@ use pocketmine\Server;
 
 class ParticleTask extends Task {
 
+    private $plugin;
+
     public function __construct(Core $plugin){
         $this->plugin = $plugin;
     }

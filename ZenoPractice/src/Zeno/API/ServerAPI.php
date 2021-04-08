@@ -13,11 +13,6 @@ class ServerAPI {
         $this->plugin = $plugin;
     }
 
-    /**
-     * @param Player $player
-     * @return int
-     */
-
     public static function getPotionsCount(Player $player) : int {
         $potions = 0;
         foreach ($player->getInventory()->getContents() as $item) {

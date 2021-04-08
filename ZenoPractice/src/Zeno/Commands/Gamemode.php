@@ -9,9 +9,6 @@ use pocketmine\command\PluginCommand;
 
 class Gamemode extends PluginCommand {
 
-    /**
-     * @var Core
-     */
     private $plugin;
 
     public function __construct(Core $plugin) {

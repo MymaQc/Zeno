@@ -2,6 +2,7 @@
 
 namespace Zeno\API;
 
+use pocketmine\event\player\PlayerCommandPreprocessEvent;
 use Zeno\Core;
 use Zeno\Selector\Select;
 use pocketmine\command\CommandSender;
@@ -17,13 +18,6 @@ class SelectAPI {
         $this->plugin = $plugin;
     }
 
-    /**
-     *
-     * @param CommandEvent $event
-     * @priority HIGHEST
-     * @return void
-     *
-     */
     public function onServerCommand(CommandEvent $event): void{
         if(!$event->getSender() instanceof ConsoleCommandSender)
             return;
@@ -31,13 +25,11 @@ class SelectAPI {
         if($this->execSelectors($m, $event->getSender())) $event->setCancelled();
     }
 
-    /**
-     *
-     * @param string $m
-     * @param CommandSender $sender
-     * @return bool
-     *
-     */
+    public function onCommandPreProcess(PlayerCommandPreProcessEvent $event) : void {
+        $m = substr($event->getMessage(), 1);
+        if(substr($event->getMessage(), 0, 1) == "/" && $this->execSelectors($m, $event->getPlayer())) $event->setCancelled();
+    }
+
     public function execSelectors(string $m, CommandSender $sender): bool{
         preg_match_all($this->buildRegExr(), $m, $matches);
         $commandsToExecute = [$m];
