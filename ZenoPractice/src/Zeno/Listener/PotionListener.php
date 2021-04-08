@@ -33,7 +33,7 @@ class PotionListener implements Listener {
         return $config->get($player);
     }
 
-    public function onProjectile(PlayerInteractEvent $event) : bool {
+    public function onProjectile(PlayerInteractEvent $event) {
         $player = $event->getPlayer();
         $item = $event->getItem();
         if ($item->getId() == ItemIds::SPLASH_POTION) {

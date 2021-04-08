@@ -13,7 +13,6 @@ class PlayerInteract implements Listener {
 
     public static $cooldown;
     private $pcooldown;
-    private $config;
     private $plugin;
 
     public function __construct(Core $plugin) {
@@ -47,12 +46,12 @@ class PlayerInteract implements Listener {
         $item = $event->getItem();
         if($event->getAction() === PlayerInteractEvent::RIGHT_CLICK_AIR) {
             if($item instanceof EnderPearl) {
-                $cooldown = $this->config->get("cooldown");
+                $cooldown = 10;
                 $player = $event->getPlayer();
                 if (isset($this->pcooldown[$player->getName()]) and time() - $this->pcooldown[$player->getName()] < $cooldown) {
                     $event->setCancelled(true);
                     $time = time() - $this->pcooldown[$player->getName()];
-                    $message = $this->config->get("message");
+                    $message = "§a{cooldown}";
                     $message = str_replace("{cooldown}", ($cooldown - $time), $message);
                     $player->sendPopup($message);
                 } else {

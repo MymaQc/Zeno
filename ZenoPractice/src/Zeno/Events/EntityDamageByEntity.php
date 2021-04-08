@@ -12,9 +12,10 @@ use pocketmine\item\enchantment\EnchantmentInstance;
 use pocketmine\item\Item;
 use pocketmine\Player;
 
-class EntityDamageByEntity implements Listener {
+class Tonfront implements Listener {
 
     private $plugin;
+    public static $cooldown;
 
     public function __construct(Core $plugin) {
         $this->plugin = $plugin;
@@ -27,6 +28,10 @@ class EntityDamageByEntity implements Listener {
             if ($event->getFinalDamage() >= $victim->getHealth()) {
                 $level = $event->getDamager()->getLevel()->getName();
                 $player = $damager;
+                if (isset(self::$cooldown[$player->getName()]) and self::$cooldown[$player->getName()] - time() > 0) {
+                    return true;
+                }
+                self::$cooldown[$player->getName()] = time()+1;
                 switch ($level){
                     case "tonbouche":
                         $player->getArmorInventory()->clearAll();

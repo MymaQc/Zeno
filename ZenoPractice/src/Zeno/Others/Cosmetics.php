@@ -14,7 +14,10 @@ class Cosmetics extends SimpleForm {
                         return true;
                     } else {
                         switch ($data) {
-                            case 0 :
+                            case "capes" :
+                                $this->plugin->getServer()->dispatchCommand($pl, $this->plugin->getConfig()->get("command7"));
+                                break;
+                            case "Tags >> Soon":
                                 break;
                         }
                     }

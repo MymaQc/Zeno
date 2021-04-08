@@ -35,7 +35,7 @@ Format des leaderboards en floating text
 §25. §fF5 §l§2» §r§a231 kills
 §26. §fTrisMc §l§2» §r§a229 kills
 §27. §fMalthay §l§2» §r§a180 kills
-§28. §fZarTreyk §l§2» §r§a174 kills
+§28. §fZarTreyk noob§l§2» §r§a174 kills
 §29. §fKumiiia §l§2» §r§a146 kills
 §210. §fTacomile §l§2» §r§a111 kills
 ```
