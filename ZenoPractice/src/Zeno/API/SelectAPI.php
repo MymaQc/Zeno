@@ -4,6 +4,9 @@ namespace Zeno\API;
 
 use Zeno\Core;
 use Zeno\Selector\Select;
+use pocketmine\command\CommandSender;
+use pocketmine\command\ConsoleCommandSender;
+use pocketmine\event\server\CommandEvent;
 
 class SelectAPI {
 
@@ -12,6 +15,54 @@ class SelectAPI {
 
     public function __construct(Core $plugin) {
         $this->plugin = $plugin;
+    }
+
+    /**
+     *
+     * @param CommandEvent $event
+     * @priority HIGHEST
+     * @return void
+     *
+     */
+    public function onServerCommand(CommandEvent $event): void{
+        if(!$event->getSender() instanceof ConsoleCommandSender)
+            return;
+        $m = $event->getCommand();
+        if($this->execSelectors($m, $event->getSender())) $event->setCancelled();
+    }
+
+    /**
+     *
+     * @param string $m
+     * @param CommandSender $sender
+     * @return bool
+     *
+     */
+    public function execSelectors(string $m, CommandSender $sender): bool{
+        preg_match_all($this->buildRegExr(), $m, $matches);
+        $commandsToExecute = [$m];
+        foreach($matches[0] as $index => $match){
+            if(isset(self::$selectors[$matches[1][$index]])){
+                $params = self::$selectors[$matches[1][$index]]->acceptsModifiers() ? $this->checkArgParams($matches, $index): [];
+                $newCommandsToExecute = [];
+                foreach($commandsToExecute as $indexB => $cmd){
+                    foreach(self::$selectors[$matches[1][$indexB]]->applySelector($sender, $params) as $selectorStr){
+                        if(strpos($selectorStr, " ") !== -1) $selectorStr = explode(" ", $selectorStr)[count(explode(" ", $selectorStr)) - 1]; // Name w/ spaces. Match the nearest name in the player. Not perfect :/
+                        $newCommandsToExecute[] = substr_replace($cmd, " " . $selectorStr . " ", strpos($cmd, $match), strlen($match));
+                    }
+                    if(count($newCommandsToExecute) == 0) {
+                        $sender->sendMessage("§cYour selector $match (" . self::$selectors[$matches[1][$indexB]]->getName() . ") did not match any player/entity.");
+                        return true;
+                    }
+                } $commandsToExecute = $newCommandsToExecute;
+            }
+        }
+
+        if(!isset($matches[0][0]))
+            return false;
+        foreach($commandsToExecute as $cmd){
+            $this->plugin->getServer()->dispatchCommand($sender, $cmd);
+        } return true;
     }
 
     public static function checkArgParams(array $match, int $index): array{

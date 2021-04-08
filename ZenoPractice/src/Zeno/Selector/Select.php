@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Zeno\Selector;
 
 use pocketmine\command\CommandSender;
@@ -42,26 +44,26 @@ abstract class Select {
         $this->acceptModifiers = $acceptModifiers;
     }
 
-    public function getName() : string {
+    public function getName(): string{
         return $this->name;
     }
 
-    public function getSelectorChar() : string {
+    public function getSelectorChar(): string{
         return $this->selectorChar;
     }
 
-    public function acceptsModifiers() : bool {
+    public function acceptsModifiers(): bool{
         return $this->acceptModifiers;
     }
 
-    abstract public function applySelector(CommandSender $sender, array $parameters = []) : array;
+    abstract public function applySelector(CommandSender $sender, array $parameters = []): array;
 
-    public function checkDefaultParams(Entity $et, array $params) : bool {
+    public function checkDefaultParams(Entity $et, array $params): bool{
         $dist = sqrt($et->distanceSquared(new Vector3($params["x"], $params["y"], $params["z"])));
         if(($params["r"] !== 0 && $dist > $params["r"]) || $dist < $params["rm"]) return false;
-        if($params["dx"] !== 0 && abs($et->x - $params["x"]) > $params["dx"]);
-        if($params["dy"] !== 0 && abs($et->y - $params["y"]) > $params["dy"]);
-        if($params["dz"] !== 0 && abs($et->z - $params["z"]) > $params["dz"]);
+        if($params["dx"] !== 0 && abs($et->x - $params["x"]) > $params["dx"]) return false;
+        if($params["dy"] !== 0 && abs($et->y - $params["y"]) > $params["dy"]) return false;
+        if($params["dz"] !== 0 && abs($et->z - $params["z"]) > $params["dz"]) return false;
         if($params["m"] !== -1 && $et instanceof Player && $et->getGamemode() !== $params["m"]) return false;
         if($params["rx"] < $et->getPitch() || $et->getPitch() < $params["rxm"]) return false;
         if($params["ry"] < $et->getYaw() || $et->getYaw() < $params["rym"]) return false;
@@ -73,5 +75,4 @@ abstract class Select {
         if($params["type"] !== "all" && $etClassName !== $params["type"]) return false;
         return true;
     }
-
 }

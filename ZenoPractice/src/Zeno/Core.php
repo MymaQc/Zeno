@@ -12,26 +12,17 @@ use Zeno\Events\{BlockBreak, DataPacketReceive, EntityDamage, EntityDamageByEnti
 use Zeno\Form\FormUI;
 use Zeno\Listener\PotionListener;
 use Zeno\Others\{Gadgets};
-use Zeno\Selector\{SelectAllPlayers, SelectRandomPlayers};
+use Zeno\Selector\{AllPlayers, ClosestPlayer, Entities, RandomPlayer, SelfSelector, WorldPlayers};
 use Zeno\Tasks\{BorderTask, BroadcastMessageTask, ParticleTask};
 use pocketmine\command\Command;
 use pocketmine\event\Listener;
-use pocketmine\event\player\PlayerJoinEvent;
-use pocketmine\event\player\PlayerInteractEvent;
-use pocketmine\event\player\PlayerQuitEvent;
-use pocketmine\event\player\PlayerRespawnEvent;
 use pocketmine\entity\Entity;
 use pocketmine\item\Item;
 use pocketmine\item\ItemFactory;
-use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 
 class Core extends PluginBase implements Listener {
-
-    /**
-     * @var Config
-     */
 
     use FormUI;
     public $red = array();
@@ -51,8 +42,12 @@ class Core extends PluginBase implements Listener {
         @mkdir($this->getDataFolder());
 
         Item::initCreativeItems();
-        SelectAPI::registerSelector(new SelectAllPlayers());
-        SelectAPI::registerSelector(new SelectRandomPlayers());
+        SelectAPI::registerSelector(new ClosestPlayer());
+        SelectAPI::registerSelector(new AllPlayers());
+        SelectAPI::registerSelector(new RandomPlayer());
+        SelectAPI::registerSelector(new WorldPlayers());
+        SelectAPI::registerSelector(new Entities());
+        SelectAPI::registerSelector(new SelfSelector());
         Entity::registerEntity(SplashPotion::class, false, ['ThrownPotion', 'minecraft:potion', 'thrownpotion']);
         Entity::registerEntity(EnderPearl::class, false, ['ThrownEnderpearl', 'minecraft:ender_pearl']);
         for($i = 37; $i <= 42; $i++) {
